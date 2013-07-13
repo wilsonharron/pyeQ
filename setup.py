@@ -24,6 +24,6 @@ def create_configuration_script():
 setup(name='pyeQ',
       version='0.1',
       install_requires=['xmltodict', 'xmlbuilder', 'pytz'],
-      data_files=[('pyeQ','pyeQ/config.json')],
+      data_files=[('pyeQ',['pyeQ/config.json'])],
       packages=['pyeQ'])
 
