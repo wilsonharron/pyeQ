@@ -9,6 +9,6 @@ import os
 import json
 
 setup(name='pyeQ',
-      version='0.1',
+      version='0.11',
       install_requires=['xmltodict', 'xmlbuilder', 'pytz'],
       packages=['pyeQ'])
