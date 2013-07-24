@@ -16,7 +16,7 @@ class DotDict(dict):
     def __setattr__(self, key, val):
         self.__setitem__(key, val)
 
-def read_configuration(config_file):
+def load_config(config_file):
     try:
         with open(config_file, 'r') as f:
             PYEQCONFIG = DotDict(json.load(f))
