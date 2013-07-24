@@ -23,7 +23,7 @@ TRUE = {'true', 'True', 'TRUE', 'yes', 'y', 'Y', 'YES', '1', 't', 'T', True}
 
 class pyeQ(object):
     def __init__(self, CONFIG):
-	    if isinstance(CONFIG, dict):
+        if isinstance(CONFIG, dict):
             PYEQCONFIG = DotDict(CONFIG)
         else:
             PYECONFIG = load_config(CONFIG)
