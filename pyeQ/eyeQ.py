@@ -26,7 +26,7 @@ class pyeQ(object):
         if isinstance(CONFIG, dict):
             PYEQCONFIG = DotDict(CONFIG)
         else:
-            PYECONFIG = load_config(CONFIG)
+            PYEQCONFIG = load_config(CONFIG)
         self.URL = PYEQCONFIG.URL
         self.CLIENT_ID = PYEQCONFIG.CLIENT_ID
         self.CLIENT_TAG = PYEQCONFIG.CLIENT_TAG
