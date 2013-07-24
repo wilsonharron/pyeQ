@@ -33,9 +33,9 @@ class pyeQ(object):
         self.CLIENT_ID_TAG = '{0}-{1}'.format(self.CLIENT_ID, self.CLIENT_TAG)
         self.COUNTRY = PYEQCONFIG.COUNTRY
         self.LANG = PYEQCONFIG.LANGUAGE
+	self.config = PYEQCONFIG 
         if not PYEQCONFIG.get('AUTH', None):
             self.get_user_auth(CONFIG)
-        self.config = PYEQCONFIG 
         self.tz = pytz.reference.LocalTimezone()
     
     def query_eyeq(self, queryxml):
