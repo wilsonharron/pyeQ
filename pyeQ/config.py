@@ -35,7 +35,7 @@ def load_config(config_file):
         PYEQCONFIG.COUNTRY = 'usa'
     if not PYEQCONFIG.get('LANGUAGE', None):
         PYEQCONFIG.LANGUAGE = 'eng'
-    return PYECONFIG
+    return PYEQCONFIG
 
 def save_config(config_file, PYEQCONFIG):
     with open(config_file, 'w') as f:
