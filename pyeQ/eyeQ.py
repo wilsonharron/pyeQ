@@ -8,11 +8,11 @@ Created on Jun 24, 2013
 import xmltodict
 import urllib2
 
-from config import PYEQCONFIG
+#from config import PYEQCONFIG
 from pyeQ.exceptions import pyeQConnectionExcption, pyeQException,\
     pyeQNotFoundException
 from xmlbuilder import XMLBuilder
-from config import save_config
+from config import load_config, save_config, DotDict
 from datetime import datetime
 
 import pytz
@@ -22,7 +22,11 @@ from collections import OrderedDict
 TRUE = {'true', 'True', 'TRUE', 'yes', 'y', 'Y', 'YES', '1', 't', 'T', True}
 
 class pyeQ(object):
-    def __init__(self):
+    def __init__(self, CONFIG):
+	    if isinstance(CONFIG, dict):
+            PYEQCONFIG = DotDict(CONFIG)
+        else:
+            PYECONFIG = load_config(CONFIG)
         self.URL = PYEQCONFIG.URL
         self.CLIENT_ID = PYEQCONFIG.CLIENT_ID
         self.CLIENT_TAG = PYEQCONFIG.CLIENT_TAG
@@ -30,8 +34,8 @@ class pyeQ(object):
         self.COUNTRY = PYEQCONFIG.COUNTRY
         self.LANG = PYEQCONFIG.LANGUAGE
         if not PYEQCONFIG.get('AUTH', None):
-            self.get_user_auth()
-            
+            self.get_user_auth(CONFIG)
+        self.config = PYEQCONFIG 
         self.tz = pytz.reference.LocalTimezone()
     
     def query_eyeq(self, queryxml):
@@ -58,20 +62,20 @@ class pyeQ(object):
         x.LANG(self.LANG)
         return x
     
-    def get_user_auth(self):
+    def get_user_auth(self, f):
         x = XMLBuilder('QUERIES')
         with x.QUERY(cmd='REGISTER'):
             x.CLIENT(self.CLIENT_ID_TAG)
         response = self.query_eyeq(x)
         self.USER = response['USER']
-        PYEQCONFIG.USER = self.USER
-        save_config()
+        self.config.USER = self.USER
+        save_config(f, self.config)
     
     def provider_lookup(self, zipcode):
         x = self.__query_xml()
         with x.QUERY(CMD='TVPROVIDER_LOOKUP'):
             x.POSTALCODE(zipcode)
-        return self.query_eyeq(x)
+        return self.query_eyeq(x)['TVPROVIDER']
 
     def provider_channels(self, provider_id):
         if isinstance(provider_id, dict):
@@ -248,12 +252,12 @@ class pyeQ(object):
             if isinstance(gnid, str):
                 gnid = [gnid]
             if isinstance(sizes, str):
-                size = [sizes]
+                sizes = [sizes]
             for id in gnid:
                 x.GN_ID(id)
             with x.OPTION:
                 x.PARAMETER('IMAGE_SIZE')
-                x.VALUE(','.join(size))
+                x.VALUE(','.join(sizes))
         return self.query_eyeq(x)
     
     def get_channel_logos(self, channelids):
